@@ -1,6 +1,6 @@
 {
   "id": "e3f2b845-8f2c-4b5a-9caf-eac1029d3e7e",
-  "revision": 1,
+  "revision": 2,
   "last_node_id": 146,
   "last_link_id": 291,
   "nodes": [
@@ -119,10 +119,10 @@
       "title": "Note: MiniMax H3",
       "properties": {},
       "widgets_values": [
-        "## MiniMax H3 Ref2VA — NVFP4\n\nWorkflow revision 1. Uses the pruned NVFP4 diffusion model and NVFP4-AWQ text encoder with the native ComfyUI loaders. Leave the diffusion loader's weight dtype on **default** so checkpoint quantization is preserved.\n\nConfigured for an RTX 5080 (16 GB VRAM) and 32 GB system RAM. Fit and generation speed depend on resolution, duration, references, and other applications; a successful generation has not yet been verified on this machine.\n\n**Current settings**\n- Resolution Selector: 0.4 MP, 16:9, multiple of 32.\n- Duration: 5 seconds, rounded up to a valid 17n+5 frame count at 24 fps.\n- Sampler: res_multistep; scheduler: simple.\n- Turbo switch off: base model, 20 steps. Switch on: Ref2V Turbo LoRA, 4 steps.\n- Reference image size: match, to keep reference token usage lower.\n\n**Before running**\nSelect your two reference images in the Load Image nodes. The template's red_superboy_on_city_roof.png and mecha_dragon_lightning.png are not included. Reference tags follow connection order. The current prompt also mentions <Audio 1>, but no audio input is connected; connect reference audio or edit that part of the prompt.\n\nThe video and audio VAEs decode the joint latent separately; CreateVideo combines them. Keep the Ref2VA model for this reference workflow.\n\nIf memory is tight, try a shorter duration or lower megapixel setting. These are adjustable starting points, not model limits.\n\nModel source: https://huggingface.co/lilcheaty/MiniMax-H3-NVFP4"
+        "## MiniMax H3 Ref2VA — NVFP4\n\nWorkflow revision 2. Uses the pruned NVFP4 diffusion model and NVFP4-AWQ text encoder with the native ComfyUI loaders. Leave the diffusion loader's weight dtype on **default** so checkpoint quantization is preserved.\n\nConfigured for an RTX 5080 (16 GB VRAM) and 32 GB system RAM. Fit and generation speed depend on resolution, duration, references, and other applications; a 256x256, 22-frame, 4-step Turbo test completed in 149 seconds with video and stereo audio. The full five-second settings below remain untested.\n\n**Current settings**\n- Resolution Selector: 0.4 MP, 16:9, multiple of 32.\n- Duration: 5 seconds, rounded up to a valid 17n+5 frame count at 24 fps.\n- Sampler: res_multistep; scheduler: simple.\n- Turbo switch off: base model, 20 steps. Switch on: Ref2V Turbo LoRA, 4 steps.\n- Reference image size: match, to keep reference token usage lower.\n\n**Before running**\nSelect your two reference images in the Load Image nodes. The template's red_superboy_on_city_roof.png and mecha_dragon_lightning.png are not included. Reference tags follow connection order. The current prompt also mentions <Audio 1>, but no audio input is connected; connect reference audio or edit that part of the prompt.\n\nThe video and audio VAEs decode the joint latent separately; CreateVideo combines them. Keep the Ref2VA model for this reference workflow.\n\nIf memory is tight, try a shorter duration or lower megapixel setting. These are adjustable starting points, not model limits.\n\nModel source: https://huggingface.co/lilcheaty/MiniMax-H3-NVFP4"
       ],
       "widgets_values_named": {
-        "text": "## MiniMax H3 Ref2VA — NVFP4\n\nWorkflow revision 1. Uses the pruned NVFP4 diffusion model and NVFP4-AWQ text encoder with the native ComfyUI loaders. Leave the diffusion loader's weight dtype on **default** so checkpoint quantization is preserved.\n\nConfigured for an RTX 5080 (16 GB VRAM) and 32 GB system RAM. Fit and generation speed depend on resolution, duration, references, and other applications; a successful generation has not yet been verified on this machine.\n\n**Current settings**\n- Resolution Selector: 0.4 MP, 16:9, multiple of 32.\n- Duration: 5 seconds, rounded up to a valid 17n+5 frame count at 24 fps.\n- Sampler: res_multistep; scheduler: simple.\n- Turbo switch off: base model, 20 steps. Switch on: Ref2V Turbo LoRA, 4 steps.\n- Reference image size: match, to keep reference token usage lower.\n\n**Before running**\nSelect your two reference images in the Load Image nodes. The template's red_superboy_on_city_roof.png and mecha_dragon_lightning.png are not included. Reference tags follow connection order. The current prompt also mentions <Audio 1>, but no audio input is connected; connect reference audio or edit that part of the prompt.\n\nThe video and audio VAEs decode the joint latent separately; CreateVideo combines them. Keep the Ref2VA model for this reference workflow.\n\nIf memory is tight, try a shorter duration or lower megapixel setting. These are adjustable starting points, not model limits.\n\nModel source: https://huggingface.co/lilcheaty/MiniMax-H3-NVFP4"
+        "text": "## MiniMax H3 Ref2VA — NVFP4\n\nWorkflow revision 2. Uses the pruned NVFP4 diffusion model and NVFP4-AWQ text encoder with the native ComfyUI loaders. Leave the diffusion loader's weight dtype on **default** so checkpoint quantization is preserved.\n\nConfigured for an RTX 5080 (16 GB VRAM) and 32 GB system RAM. Fit and generation speed depend on resolution, duration, references, and other applications; a 256x256, 22-frame, 4-step Turbo test completed in 149 seconds with video and stereo audio. The full five-second settings below remain untested.\n\n**Current settings**\n- Resolution Selector: 0.4 MP, 16:9, multiple of 32.\n- Duration: 5 seconds, rounded up to a valid 17n+5 frame count at 24 fps.\n- Sampler: res_multistep; scheduler: simple.\n- Turbo switch off: base model, 20 steps. Switch on: Ref2V Turbo LoRA, 4 steps.\n- Reference image size: match, to keep reference token usage lower.\n\n**Before running**\nSelect your two reference images in the Load Image nodes. The template's red_superboy_on_city_roof.png and mecha_dragon_lightning.png are not included. Reference tags follow connection order. The current prompt also mentions <Audio 1>, but no audio input is connected; connect reference audio or edit that part of the prompt.\n\nThe video and audio VAEs decode the joint latent separately; CreateVideo combines them. Keep the Ref2VA model for this reference workflow.\n\nIf memory is tight, try a shorter duration or lower megapixel setting. These are adjustable starting points, not model limits.\n\nModel source: https://huggingface.co/lilcheaty/MiniMax-H3-NVFP4"
       },
       "color": "#222",
       "bgcolor": "#000"
@@ -1753,10 +1753,19 @@
     "VHS_MetadataImage": true,
     "VHS_KeepIntermediate": true,
     "minimax_h3_setup": {
-      "version": "1.0.0",
+      "version": "1.0.1",
       "model_manifest": "script_examples/minimax_h3_models.json",
       "model_root": "C:/models",
-      "generation_verified": false
+      "verification": {
+        "status": "smoke_test_passed",
+        "width": 256,
+        "height": 256,
+        "frames": 22,
+        "steps": 4,
+        "turbo": true,
+        "execution_seconds": 148.84,
+        "default_settings_tested": false
+      }
     }
   },
   "version": 0.4
