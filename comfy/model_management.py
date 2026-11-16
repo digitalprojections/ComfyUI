@@ -1345,6 +1345,8 @@ def pick_weight_dtype(dtype, fallback_dtype, device=None):
 def device_supports_non_blocking(device):
     if args.force_non_blocking:
         return True
+    if WINDOWS and is_device_cuda(device):
+        return False
     if is_device_mps(device):
         return False #pytorch bug? mps doesn't support non blocking
     if is_intel_xpu(): #xpu does support non blocking but it is slower on iGPUs for some reason so disable by default until situation changes
@@ -1363,11 +1365,15 @@ def force_channels_last():
 
 STREAMS = {}
 NUM_STREAMS = 0
+
+def default_async_offload_enabled():
+    return (is_nvidia() and not WINDOWS) or is_amd()
+
 if args.async_offload is not None:
     NUM_STREAMS = args.async_offload
 else:
     #  Enable by default on Nvidia and AMD
-    if is_nvidia() or is_amd():
+    if default_async_offload_enabled():
         NUM_STREAMS = 2
 
 if args.disable_async_offload:

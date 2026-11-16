@@ -489,6 +489,39 @@ def hijack_progress(server_instance):
     comfy.utils.set_progress_bar_global_hook(hook)
 
 
+def _is_windows_transport_reset(context: dict) -> bool:
+    if os.name != "nt":
+        return False
+
+    exception = context.get("exception")
+    if not isinstance(exception, ConnectionResetError):
+        return False
+
+    message = context.get("message")
+    if isinstance(message, str) and "_ProactorBasePipeTransport._call_connection_lost" in message:
+        return True
+
+    handle = context.get("handle")
+    callback = getattr(handle, "_callback", None)
+    return getattr(callback, "__qualname__", "") == "_ProactorBasePipeTransport._call_connection_lost"
+
+
+def install_asyncio_exception_handler(asyncio_loop: asyncio.AbstractEventLoop) -> None:
+    previous_handler = asyncio_loop.get_exception_handler()
+
+    def exception_handler(loop: asyncio.AbstractEventLoop, context: dict) -> None:
+        if _is_windows_transport_reset(context):
+            logging.debug("Ignoring Windows transport reset during connection close")
+            return
+
+        if previous_handler is not None:
+            previous_handler(loop, context)
+        else:
+            loop.default_exception_handler(context)
+
+    asyncio_loop.set_exception_handler(exception_handler)
+
+
 def setup_database(asset_manager):
     if not dependencies_available():
         return
@@ -498,7 +531,6 @@ def setup_database(asset_manager):
         warn_if_database_in_use()
         asset_manager.startup()
         return
-
     try:
         init_db()
         asset_manager.startup()
@@ -602,6 +634,7 @@ def start_comfyui(asyncio_loop=None):
     if not asyncio_loop:
         asyncio_loop = asyncio.new_event_loop()
         asyncio.set_event_loop(asyncio_loop)
+    install_asyncio_exception_handler(asyncio_loop)
     prompt_server = server.PromptServer(asyncio_loop, asset_manager)
 
     if args.enable_manager and not args.disable_manager_ui:

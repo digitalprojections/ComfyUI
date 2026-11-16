@@ -462,6 +462,43 @@ class RecordAudio(IO.ComfyNode):
     load = execute  # TODO: remove
 
 
+class AudioDuration(IO.ComfyNode):
+    @classmethod
+    def define_schema(cls):
+        return IO.Schema(
+            node_id="AudioDuration",
+            search_aliases=["audio length", "get audio duration", "audio seconds", "audio samples"],
+            display_name="Get Audio Duration",
+            description="Returns the duration of an audio input in seconds, along with its sample count and sample rate.",
+            category="audio",
+            essentials_category="Audio",
+            inputs=[
+                IO.Audio.Input("audio"),
+            ],
+            outputs=[
+                IO.Float.Output(display_name="seconds"),
+                IO.Int.Output(display_name="samples"),
+                IO.Int.Output(display_name="sample_rate"),
+            ],
+        )
+
+    @classmethod
+    def execute(cls, audio) -> IO.NodeOutput:
+        if audio is None:
+            raise ValueError("AudioDuration: input audio is None (source video may have no audio track).")
+
+        waveform = audio["waveform"]
+        sample_rate = int(audio["sample_rate"])
+        if sample_rate <= 0:
+            raise ValueError(f"AudioDuration: sample_rate must be positive, got {sample_rate}.")
+
+        samples = int(waveform.shape[-1])
+        seconds = samples / sample_rate
+        return IO.NodeOutput(float(seconds), samples, sample_rate)
+
+    get_duration = execute  # TODO: remove
+
+
 class TrimAudioDuration(IO.ComfyNode):
     @classmethod
     def define_schema(cls):
@@ -922,6 +959,7 @@ class AudioExtension(ComfyExtension):
             PreviewAudio,
             ConditioningStableAudio,
             RecordAudio,
+            AudioDuration,
             TrimAudioDuration,
             SplitAudioChannels,
             JoinAudioChannels,
